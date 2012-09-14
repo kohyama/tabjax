@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<style type="text/css">
+table {border: solid 2px black; border-collapse: collapse; }
+td {border: solid 1px black;}
+</style>
+<script type="text/javascript" src="tabjax.js"></script>
+<script type="text/javascript">
+window.onload = function () {
+  tabjax.add({
+    // show contents in a HTML table whose id is 'list'.
+    "table_id": "list",
+    // Get contents of updates, repeatedly by 2000 [ms]
+    "interval": 2000,
+    "base": {
+      // Get csv file from the server
+      "URL": "http://" + location.hostname + "/foo.csv",
+      // tabjax.str2aa translate textdata to an array of arrays of strings
+      // specifing record separator and field separator.
+      "translate": function (d) { return tabjax.str2aa(d, '\r\n', ','); },
+      // What index of columns of translated data you want to show
+      // in what columns in the HTML table
+      "show": [[0, 0], [1, 1], [8, 2], [9, 4]]
+    },
+    "updates": [
+      {
+        // Get '&' and '=' separated data from the server
+        "URL": "http://" + location.hostname + "/bar.dat",
+        // translate textdata to an array of arrays of strings
+        "translate": function (d) { return tabjax.str2aa(d, '&', '='); },
+        // Show column[1] of data to column[3] of the HTML table
+        "show": [[1, 3]],
+        // Show row in the row if column[0] of foo.csv and
+        // column[0].substring(1) of bar.dat are the same.
+        "match": function (b, u) {
+          return b && u && b[0] && u[0] && (u[0].substring(1) == b[0]);
+        },
+        // Change '0' to 'OFF' and the others to 'ON', if
+        // column[1] of foo.csv is 'D'.
+        "ofilter": function (b, u) {
+          if (b && u && b[1] && u[1]) {
+            switch (b[1]) {
+            case "D": u[1] = ((u[1] == '0')?'OFF':'ON'); break;
+            }
+          }
+        }
+      }
+    ]
+  });
+};
+</script>
+</head>
+<body>
+<table id="list"></table>
+</body>
+</html>
