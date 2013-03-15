@@ -46,10 +46,6 @@ var tabjax = new function () {
         "Thu, 01 Jun 1970 00:00:00 GMT");
       xhr.send();
     }
-    String.prototype.cap = function () { 
-       return this.toLowerCase().replace(/^.|\s\S/g,
-         function(a) { return a.toUpperCase(); });
-    }
 
     function reload() {
       var i, u;
@@ -121,7 +117,7 @@ var tabjax = new function () {
                   continue;
                 if (!(td = tds[j].firstChild))
                   continue;
-                if (td.nodeValue.cap().indexOf(fss[j].cap()) < 0) {
+                if (td.nodeValue.toLowerCase().indexOf(fss[j].toLowerCase()) < 0) {
                   // trs[i].hidden = true;
                   if (trs[i].style)
                     trs[i].style.display = 'none';
