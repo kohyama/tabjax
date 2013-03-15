@@ -57,11 +57,13 @@ var tabjax = new function () {
           table = $(config.table_id);
           trs = table.childNodes;
           for (j in trs) {
-            if (j == 0)
+            if (!trs.hasOwnProperty(j) || j == 0)
               continue;
             tds = trs[j].childNodes;
             r = base[j - 1];
             for (k in uaa) {
+              if (!uaa.hasOwnProperty(k))
+                continue;
               ur = uaa[k];
               if (u.match(r, ur)) {
                 if (u.ofilter)
@@ -117,7 +119,8 @@ var tabjax = new function () {
                   continue;
                 if (!(td = tds[j].firstChild))
                   continue;
-                if (td.nodeValue.toLowerCase().indexOf(fss[j].toLowerCase()) < 0) {
+                if (td.nodeValue.toLowerCase().indexOf(fss[j].toLowerCase())
+                  < 0) {
                   // trs[i].hidden = true;
                   if (trs[i].style)
                     trs[i].style.display = 'none';
